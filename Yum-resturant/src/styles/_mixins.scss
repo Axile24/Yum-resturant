@@ -1,37 +1,44 @@
+@use "./variables" as *; // Import variables
+
+
+// 📏 Border Radius Mixin
+@mixin rounded($radius: 8px) {
+  border-radius: $radius;
+}
+
+
 // 🛠 Flexbox Centering
 @mixin flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+// 🛒 Button Styles - Fix by Adding Parameters
+@mixin button-styles($bg-color, $text-color, $border: none) {
+  background: $bg-color;
+  color: $text-color;
+  padding: $spacing-small $spacing-large;
+  border: $border;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: $font-size-large;
+  font-weight: 700;
+  width: 100%;
+  max-width: 390px;
+  height: 77px;
+  margin-top: $spacing-small;
+  transition: background 0.3s ease-in-out;
+  font-family: $font-primary;
+}
+
+// 📱 Responsive Design
+@mixin responsive($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: 768px) { @content; }
+  } @else if $breakpoint == tablet {
+    @media (max-width: 1024px) { @content; }
   }
-  
-  // 🛒 Button Styles
-  @mixin button-styles {
-    background: #222;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease-in-out;
-  
-    &:hover {
-      background: #333;
-    }
-  }
-  
-  // 📏 Border Radius
-  @mixin rounded($radius: 8px) {
-    border-radius: $radius;
-  }
-  
-  // 📱 Responsive Design
-  @mixin responsive($breakpoint) {
-    @if $breakpoint == mobile {
-      @media (max-width: 768px) { @content; }
-    } @else if $breakpoint == tablet {
-      @media (max-width: 1024px) { @content; }
-    }
-  }
-  
-  
+}

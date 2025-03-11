@@ -1,32 +1,39 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getApiKey } from "../requests/api";
 
-const API_URL = "https://fdnzawlcf6.execute-api.eu-north-1.amazonaws.com";
+const API_BASE_URL = "https://fdnzawlcf6.execute-api.eu-north-1.amazonaws.com";
 
-// Skicka en beställning
+// Async thunk för att lägga en order
 export const placeOrder = createAsyncThunk(
   "order/placeOrder",
   async (orderData, { rejectWithValue }) => {
     try {
       const apiKey = await getApiKey();
-      const tenantID = localStorage.getItem("tennantId") || "Cote d'azure";
+      const tenantId = localStorage.getItem("tenantId") || "SimonFoodTruck";
+      
+      const itemIds = orderData.items.flatMap(item =>
+        Array(item.quantity).fill(item.id)
+      );
 
-      // Skapa en lista med alla artikel-ID:n baserat på antal
-      const itemIDs = orderData.items.flatMap(item => Array(item.quantity).fill(item.id));
-
-      const response = await fetch(`${API_URL}/${tenantID}/orders`, {
+      const response = await fetch(`${API_BASE_URL}/${tenantId}/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-zocom": apiKey,
         },
-        body: JSON.stringify({ items: itemIDs }),
+        body: JSON.stringify({ items: itemIds }),
       });
 
       if (!response.ok) {
-        throw new Error("Order kunde inte läggas.");
+        const errorText = await response.text();
+        console.log("Status code:", response.status);
+        console.log("Error text from server:", errorText);
+        throw new Error("Order kunde inte läggas");
       }
-      return await response.json();
+
+      const data = await response.json();
+      console.log("API response:", data); // För felsökning
+      return data; 
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -35,15 +42,22 @@ export const placeOrder = createAsyncThunk(
 
 const orderSlice = createSlice({
   name: "order",
-  initialState: { orderNumber: null, eta: null, status: "idle", error: null },
+  initialState: {
+    orderNumber: null,
+    eta: null,
+    status: "idle",
+    error: null,
+  },
   reducers: {},
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      .addCase(placeOrder.pending, state => { state.status = "loading"; })
+      .addCase(placeOrder.pending, (state) => {
+        state.status = "loading";
+      })
       .addCase(placeOrder.fulfilled, (state, action) => {
-        state.orderNumber = action.payload.order.id;
-        state.eta = action.payload.eta;
-        state.status = "success";
+        state.orderNumber = action.payload.order.id; 
+        state.eta = action.payload.order.eta;        
+        state.status = "succeeded";
       })
       .addCase(placeOrder.rejected, (state, action) => {
         state.status = "failed";

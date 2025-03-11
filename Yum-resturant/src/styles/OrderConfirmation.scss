@@ -1,0 +1,53 @@
+/* Centering the buttons */
+.order-confirmation-page {
+  position: relative;
+  width: 390px;
+  margin: 0 auto;
+  background: #605858;
+  min-height: 844px;
+  padding: 20px;
+  text-align: center;
+  color: hsl(0, 0%, 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* ✅ Ensures all content is centered */
+}
+
+/* Center the button container */
+.button-container {
+  display: flex;
+  flex-direction: column; /* ✅ Stacks buttons vertically */
+  align-items: center; /* ✅ Centers buttons horizontally */
+  gap: 10px; /* ✅ Adds spacing between buttons */
+}
+
+/* Proceed & Receipt Buttons */
+.proceed-btn, .receipt-btn {
+  background-color: #353131;
+  color: white;
+  border: none;
+  padding: 15px 20px;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  width: 100%; /* ✅ Make buttons full width */
+  max-width: 380px; /* ✅ Ensure they are properly sized */
+  height: 77px;
+  text-align: center;
+}
+
+.proceed-btn:hover {
+  background-color: #444;
+}
+
+.receipt-btn {
+  background-color: #605858;
+  color: #F4F3F1;
+  border: 1px solid #F4F3F1;
+}
+
+.receipt-btn:hover {
+  background-color: #777;
+}
