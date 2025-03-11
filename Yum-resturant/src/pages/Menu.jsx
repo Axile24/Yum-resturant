@@ -36,6 +36,10 @@ const Menu = () => {
 
             <div className="cart-container">
                 <div className="cart-box" onClick={() => navigate("/cart")}>
+                <img src={getImageUrl("Union.svg")}
+             alt="Bag Logo"
+              className="cart-container-bag" />
+
                     <span className="cart-badge">{cartItemCount}</span>
                 </div>
             </div>

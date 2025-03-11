@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { getImageUrl } from "../utils/utils";
 import { placeOrder } from "../redux/orderSlice";
 import { decreaseQuantity, addToCart, removeFromCart } from "../redux/cartSlice";
@@ -9,61 +9,62 @@ import "../styles/cart.scss";
 const Cart = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { items } = useSelector((state) => state.cart); // Récupère les articles du panier depuis Redux
+    const { items } = useSelector((state) => state.cart);
+    const [clickedItem, setClickedItem] = useState(null); // State to track clicked item for animation
 
-    console.log("Rendu du composant Cart", { items }); // Log des articles dans le panier à chaque rendu
-
-    // Calcul dynamique du total en utilisant useMemo pour éviter les recalculs inutiles
+    // Compute total dynamically
     const total = useMemo(() => {
-        const calculatedTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-        console.log("Total calculé :", calculatedTotal); // Log du total à chaque mise à jour des articles
-        return calculatedTotal;
+        return items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     }, [items]);
 
-    // Fonction de validation du panier et passage de la commande
+    // Handle checkout process
     const handleCheckout = useCallback(async () => {
-        console.log("Début du checkout");
-
-        const tenantID = localStorage.getItem("tenantID"); // Récupération de l'ID du client
-        console.log("ID du tenant récupéré :", tenantID);
-
+        const tenantID = localStorage.getItem("tenantID");
         const orderData = { tenant: tenantID, items, total };
-        console.log("Données de la commande :", orderData); // Affichage des données de la commande avant l'envoi
-
-        await dispatch(placeOrder(orderData)); // Envoi de la commande via Redux
-
-        console.log("Commande passée avec succès, redirection vers /order");
-        navigate("/order"); // Redirige l'utilisateur vers la page de confirmation de commande
+        await dispatch(placeOrder(orderData));
+        navigate("/order");
     }, [dispatch, items, total, navigate]);
 
-    // Si le panier est vide, affiche un message approprié
+    // Handle quantity change with animation
+    const handleQuantityChange = (item, type) => {
+        setClickedItem(item.id); // Set the clicked item to apply animation
+        setTimeout(() => setClickedItem(null), 200); // Reset animation after 200ms
+
+        if (type === "increase") {
+            dispatch(addToCart(item));
+        } else {
+            dispatch(decreaseQuantity(item));
+        }
+    };
+
+    // Handle item removal
+    const handleRemove = (item) => {
+        dispatch(removeFromCart(item));
+    };
+
     if (items.length === 0) {
-        console.log("Panier vide, affichage du message correspondant");
         return (
             <div className="cart-page">
                 <img
                     src={getImageUrl("Union.svg")}
                     alt="Cart Icon"
                     className="cart-icon-cart"
-                    onClick={() => navigate("/menu")} // Redirige vers le menu si l'utilisateur clique sur l'icône
+                    onClick={() => navigate("/menu")}
                 />
-                <p className="empty-cart">Varukorgen är tom</p> {/* Message indiquant que le panier est vide */}
+                <p className="empty-cart">Varukorgen är tom</p>
             </div>
         );
     }
 
     return (
         <div className="cart-page">
-            <img src={getImageUrl('Union.svg')}
+            <img
+                src={getImageUrl("Union.svg")}
                 alt="Cart Icon"
                 className="cart-icon-cart"
-                onClick={() => {
-                    console.log("Redirection vers la page du menu");
-                    navigate("/menu");
-                }}
+                onClick={() => navigate("/menu")}
             />
 
-            {/* Liste des articles dans le panier */}
             <ul className="cart-items">
                 {items.map((item) => (
                     <li key={item.id} className="cart-item">
@@ -73,57 +74,36 @@ const Cart = () => {
                             <span className="cart-price">{item.price * item.quantity} SEK</span>
                         </div>
 
-                        {/* Contrôles pour modifier la quantité d'un article */}
                         <div className="cart-controls">
                             <button
-                                className="control-btn"
-                                onClick={() => {
-                                    console.log(`Diminution de la quantité : ${item.name}`);
-                                    dispatch(decreaseQuantity(item)); // Diminue la quantité de l'article
-                                }}
+                                className={`control-btn ${clickedItem === item.id ? "btn-clicked" : ""}`}
+                                onClick={() => handleQuantityChange(item, "decrease")}
                             >
                                 -
                             </button>
                             <span className="quantity">{item.quantity}</span>
                             <button
-                                className="control-btn"
-                                onClick={() => {
-                                    console.log(`Augmentation de la quantité : ${item.name}`);
-                                    dispatch(addToCart(item)); // Augmente la quantité de l'article
-                                }}
+                                className={`control-btn ${clickedItem === item.id ? "btn-clicked" : ""}`}
+                                onClick={() => handleQuantityChange(item, "increase")}
                             >
                                 +
                             </button>
-                            <button
-                                className="trash-btn"
-                                onClick={() => {
-                                    console.log(`Suppression de l'article : ${item.name}`);
-                                    dispatch(removeFromCart(item)); // Supprime l'article du panier
-                                }}
-                            >
-                                🗑
-                            </button>
+                            <button className="trash-btn" onClick={() => handleRemove(item)}>🗑</button>
                         </div>
                     </li>
                 ))}
             </ul>
 
-            {/* Affichage du total du panier */}
-            <div className="cart-total-box">
-                <span className="cart-total-label">TOTAL</span>
-                <span className="cart-total-value">{total} SEK</span>
-            </div>
+            <div className="cart-bottom-container">
+                <div className="cart-total-box">
+                    <span className="cart-total-label">TOTAL</span>
+                    <span className="cart-total-value">{total} SEK</span>
+                </div>
 
-            {/* Bouton de validation de la commande */}
-            <button
-                className="checkout-btn"
-                onClick={() => {
-                    console.log("Bouton Checkout cliqué");
-                    handleCheckout();
-                }}
-            >
-                TAKE MY MONEY
-            </button>
+                <button className="checkout-btn" onClick={handleCheckout}>
+                    TAKE MY MONEY
+                </button>
+            </div>
         </div>
     );
 };
