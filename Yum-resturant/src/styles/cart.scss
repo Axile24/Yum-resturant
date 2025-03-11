@@ -1,0 +1,184 @@
+// 📥 Import Variables & Mixins
+@use "variables" as *;
+@use "mixins" as *;
+
+/* 🛒 Cart Page */
+.cart-page {
+  position: relative; 
+  width: 350px;
+  margin: 0 auto;
+  background: $background-light; // Variable instead of #eeeeee
+  min-height: 844px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  color: $dip-hover;
+}
+
+/* 🛍 Cart Icon */
+.cart-icon-cart {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 31px;
+  cursor: pointer;
+  margin-top: 29px;
+  margin-right: 4px;
+}
+
+/* 🛑 Empty Cart Message */
+.empty-cart {
+  text-align: center;
+  font-weight: 600;
+  font-size: $font-size-medium;
+  margin-top: 60px;
+  color: $brown-color; // Use brownish variable from your theme
+}
+
+/* 📦 Cart Items List */
+.cart-items {
+  list-style: none;
+  padding: 0;
+  margin: 111px 20px 0 20px;
+  border-top: 1px solid $border-color; // Uses variable instead of #aaa
+  border-bottom: 2px solid $border-color;
+  padding-bottom: 10px;
+}
+
+/* 🏷 Individual Cart Item */
+.cart-item {
+  margin-bottom: 16px;
+}
+
+/* 🏷 Cart Header */
+.cart-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  margin-top: 13px;
+}
+
+/* 📛 Item Name */
+.cart-name {
+  flex-shrink: 0;
+  font-size: $font-size-large;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* 📏 Dotted Line */
+.cart-line {
+  flex-grow: 1;
+  border-bottom: 1px dotted $dip-hover;
+  margin-bottom: -2px;
+}
+
+/* 💰 Item Price */
+.cart-price {
+  font-weight: 700;
+  white-space: nowrap;
+  font-size: $font-size-large;
+}
+
+/* 🎛 Quantity Controls */
+.cart-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* ➖➕ Control Buttons */
+.control-btn {
+  background: none;
+  border: none;
+  font-size: $font-size-small;
+  cursor: pointer;
+  color: $text-color;
+  @include flex-center;
+  padding: 5px;
+  width: 24px;
+  height: 24px;
+  @include rounded(50%);
+  transition: background 0.3s ease-in-out;
+
+  &:hover {
+    background: $hover-color;
+    color: white;
+  }
+}
+
+/* 🔢 Quantity Display */
+.quantity {
+  font-size: $font-size-small;
+  font-weight: 600;
+}
+
+/* 🗑 Trash Button */
+.trash-btn {
+  background: none;
+  border: none;
+  font-size: $font-size-small;
+  cursor: pointer;
+  color: $text-color;
+  padding: 5px;
+  transition: color 0.3s ease-in-out;
+
+  &:hover {
+    color: $danger-color;
+  }
+}
+/* 💲 Cart Total Box */
+/* 💲 Cart Total Box */
+/* 💲 Cart Total Box */
+.cart-total-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $secondary-color;
+    color: $text-color;
+    width: 90%;
+    max-width: 360px;
+    margin-top: auto; // Pushes it to the bottom dynamically
+    margin-bottom: 4px; // Keeps spacing tight
+    padding: 12px 16px;
+    font-weight: 700;
+    font-size: $font-size-medium;
+    @include rounded(8px);
+    
+    // Centers horizontally
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* ✅ Checkout Button */
+  .checkout-btn {
+    display: block;
+    width: 90%;
+    max-width: 360px;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: $font-size-large;
+    margin-bottom: 8px; // Ensures it's near the bottom
+    padding: 12px 16px;
+    font-weight: 700;
+    @include rounded(8px);
+    transition: background 0.3s ease-in-out;
+    
+    // Centers horizontally
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  
+    &:hover {
+      background-color: $hover-color;
+    }
+  }
+  
+  

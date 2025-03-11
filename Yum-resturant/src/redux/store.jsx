@@ -3,13 +3,13 @@ import menuReducer from "./menuSlice";
 import cartReducer from "./cartSlice";
 import orderReducer from "./orderSlice";
 
-// Konfigurerar Redux store och inkluderar reducers
 export const store = configureStore({
-  reducer: {
-    menu: menuReducer,
-    cart: cartReducer,
-    order: orderReducer,
-  },
+    reducer: {
+        menu: menuReducer,
+        cart: cartReducer,
+        order: orderReducer,
+    },
+    devTools: true, // Enable Redux DevTools
 });
 
 export default store;

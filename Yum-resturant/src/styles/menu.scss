@@ -1,0 +1,198 @@
+// 📥 Importing Variables and Mixins
+@use 'variables' as *;
+@use 'mixins' as *;
+@use "sass:color";
+
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@100..900&family=PT+Serif:wght@400;700&family=Work+Sans:wght@100..900&display=swap');
+
+// 📄 Menu Page
+.menu-page {
+  width: 390px;
+  height: 700px;
+  background-size: cover;
+  background-position: center;
+  background: url("../assets/bg.png"), $primary-color;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; // Centering the content vertically
+  padding-top: 20px;
+  top: 30%;
+  left: 20%;
+  border-radius: 20px;
+}
+
+//  Logo
+.logo2 {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 64px;
+  height: 64px;
+  @include rounded(4px);
+  margin-top: 7px;
+}
+
+//  Cart
+.cart-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  @include flex-center;
+
+  .cart-box {
+    width: 64px;
+    height: 64px;
+    @include rounded();
+    background-color: $background-light;
+    margin-top: 14px;
+  }
+
+  .cart-badge {
+    position: absolute;
+    top: 5px;
+    right: -7px;
+    background-color: $cart-badge-color;
+    color: white;
+    font-size: 10px;
+    font-weight: 400;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    @include flex-center;
+  }
+}
+
+// 📜 Optimized Menu Box (Smaller & Positioned Below Cart & Logo)
+.menu-box {
+  width: 280px; // Reduced width
+  min-height: 150px; // Reduced height
+  max-height: 70vh;  // Limit height
+  background-color: $secondary-color;
+  padding: 15px;
+  @include rounded();
+  color: $text-color;
+  text-align: center;
+  overflow-y: auto;
+
+  /* Ensures it appears BELOW the cart and logo */
+  position: absolute;
+  top: 110px; // Moves it down
+  left: 50%;
+  transform: translateX(-50%);
+  
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+  h1 {
+    font-size: $font-size-medium; // Adjusted for smaller box
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .menu-item {
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(117, 62, 62, 0.2);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 8px;
+    text-align: left;
+
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+    }
+
+    .menu-name {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .menu-price {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    &:hover {
+      background-color: $hover-color;
+      color: white;
+      cursor: pointer;
+    }
+  }
+}
+
+// 🥢 Dips Section
+.dips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 21px;
+}
+
+.dip-item {
+  background-color: $hover-color;
+  border: 1px solid #ccc;
+  padding: 10px 14px;
+  @include rounded();
+  font-size: 14px;
+  text-align: center;
+  min-width: 80px;
+  height: 41px;
+  @include flex-center;
+
+  &:hover {
+    background-color: $dip-hover;
+    border: 1px solid $secondary-color;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+}
+
+// 📏 Menu Header with Price
+.menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  gap: 10px;
+  width: 100%;
+
+  .menu-line {
+    flex-grow: 1;
+    border-bottom: 1px dotted white;
+    height: 1px;
+    align-self: center;
+  }
+
+  .menu-price {
+    min-width: 50px;
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+/* 🎨 Styled Scrollbar */
+.menu-box::-webkit-scrollbar {
+  width: 8px; /* Adjust scrollbar width */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.menu-box::-webkit-scrollbar-track {
+  background: $background-light; /* Track color */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.menu-box::-webkit-scrollbar-thumb {
+  background: $secondary-color; /* Scrollbar color */
+  border-radius: 10px; /* Fully rounded scrollbar */
+  &:hover {
+    background: color.scale($secondary-color, $lightness: -10%);
+    
+  }
+}

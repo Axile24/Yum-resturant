@@ -62,31 +62,27 @@ export const createTenant = async (apiKey) => {
 // Fonction pour récupérer le menu du tenant
 export const fetchMenu = async () => {
     try {
-        // Obtient la clé API pour s'authentifier
         const key = await getApiKey();
-        
-        // Vérifie si un tenantId est enregistré, sinon utilise "Cote d'Azure" par défaut
         const tenantId = localStorage.getItem("tenantId") || "Cote d'Azure";
+        console.log("Fetching menu for tenant:", tenantId);
 
-        // Liste des catégories d'articles à récupérer
         const categories = ["wonton", "dip"];
-
-        // Effectue plusieurs requêtes pour récupérer le menu de chaque catégorie
         const menuData = await Promise.all(
             categories.map((category) =>
                 fetch(`${URL}/menu?tenant=${tenantId}&type=${category}`, { 
-                    headers: { "x-zocom": key } // Authentification avec la clé API
+                    headers: { "x-zocom": key } 
                 })
-                .then((res) => res.json()) // Convertit la réponse en JSON
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(`Menu fetched for ${category}:`, data);
+                    return data;
+                })
             )
         );
 
-        // Regroupe tous les items des différentes catégories dans un seul tableau et les retourne
         return menuData.flatMap((data) => data.items || []);
-
     } catch (error) {
-        // Affiche une erreur si la récupération du menu échoue
-        console.error("Erreur lors de la récupération du menu:", error);
-        throw error;
+        console.error("Error fetching menu:", error);
+        return [];
     }
 };

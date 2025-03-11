@@ -1,0 +1,29 @@
+// 🎨 Colors
+$primary-color: #8ED8BF;
+$secondary-color: #5c5252;
+$hover-color: #827b7b;
+$dip-hover: #332d2d;
+$text-color: white;
+$background-light: #F4F3F1F0;
+$cart-badge-color: rgb(223, 87, 87);
+$border-color: #aaa; // Adjust to match your theme
+$danger-color: #e63946; // A red color for delete/trash buttons
+$brown-color: #8B5A2B; // Example brown (Chocolate)
+
+
+// Add this to variables.scss if not present
+
+
+
+// 📝 Fonts
+$font-primary: 'Outfit', sans-serif;
+$font-size-base: 16px;
+$font-size-small: 14px;
+$font-size-large: 24px;
+$font-size-medium: 16px; // Adjust the value as needed
+
+// 📏 Spacing
+$spacing-small: 10px;
+$spacing-medium: 100px;
+$spacing-large: 36px;
+$border-radius: 4px;
