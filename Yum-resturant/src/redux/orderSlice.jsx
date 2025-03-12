@@ -9,7 +9,7 @@ export const placeOrder = createAsyncThunk(
   async (orderData, { rejectWithValue }) => {
     try {
       const apiKey = await getApiKey();
-      const tenantId = localStorage.getItem("tenantId") || "SimonFoodTruck";
+      const tenantId = localStorage.getItem("tenantId") || "Cote d'azure";
       
       const itemIds = orderData.items.flatMap(item =>
         Array(item.quantity).fill(item.id)
